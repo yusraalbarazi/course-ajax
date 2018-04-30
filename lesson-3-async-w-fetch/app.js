@@ -17,6 +17,12 @@
             .then(addImage)
             .catch(e => requestError(e, 'image'));
 
+        fetch(`http://api.nytimes.com/svc/search/v2/articlesearch.json?q=${searchedForText}&api-key=6acf06b4339540e7a8c3bd040333bb57`)
+            .then(response => response.json())
+            .then(addArticles)
+            .catch(e => requestError(e, 'articles'));
+
+
         function addImage(images) {
             let htmlContent = '';
 
@@ -28,15 +34,7 @@
             responseContainer.insertAdjacentHTML('afterbegin', htmlContent);
         }
 
-        function requestError(e, part) {
-            console.log(e);
-            responseContainer.insertAdjacentHTML('beforeend', `<p class="network-warning"> oh no! There was an error making a request for the ${part}.</p>`);
-        }
 
-        fetch(`http://api.nytimes.com/svc/search/v2/articlesearch.json?q=${searchedForText}&api-key=6acf06b4339540e7a8c3bd040333bb57`)
-            .then(response => response.json())
-            .then(addArticles)
-            .catch(e => requestError(e, 'article'));
 
         function addArticles(data) {
             let htmlContent = '';
@@ -50,5 +48,11 @@
             responseContainer.insertAdjacentHTML('beforeend', htmlContent);
 
         }
+
+        function requestError(e, part) {
+            console.log(e);
+            responseContainer.insertAdjacentHTML('beforeend', `<p class="network-warning"> oh no! There was an error making a request for the ${part}.</p>`);
+        }
+
     });
 })();
